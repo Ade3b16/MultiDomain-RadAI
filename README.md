@@ -1,65 +1,82 @@
-MultiDomain-RadAI: AI-Powered Multi-Domain Radiological Analysis and Automated Reporting
+# MultiDomain-RadAI: AI-Powered Multi-Domain Radiological Analysis and Automated Reporting
 
-💡 Project Overview
+## 💡 Project Overview
 
-MultiDomain-RadAI is a Master's level AI engineering project designed to create a robust, end-to-end system for the automated analysis and diagnostic reporting of medical X-ray images across multiple anatomical domains.
+**MultiDomain-RadAI** is a Master's level AI engineering project designed to build a robust, end-to-end system for automated analysis and diagnostic reporting of medical X-ray images across multiple anatomical domains.
 
-The system addresses the clinical challenge of radiologist workload and diagnostic variability by implementing a cascaded deep learning pipeline that mirrors the logical steps of a human expert: Identify the image $\rightarrow$ Analyze the pathology $\rightarrow$ Generate a structured report.
+The system addresses radiologist workload and diagnostic variability using a cascaded deep-learning pipeline that mimics human expert reasoning:
 
-🎯 Key Goals and Features
+**Identify the image → Analyze the pathology → Generate a structured report**
 
-Multi-Domain Generalization (Phase 1): Train a single "Gatekeeper" model capable of classifying X-rays across various body parts (Chest, Knee, Hand, Skull, etc.) and routing the image to the correct specialized analysis module.
+---
 
-Pathology Localization and Classification (Phase 2): Utilize Multi-Task Learning (MTL) to simultaneously classify diseases/abnormalities (e.g., Pneumonia, Fracture) and generate visual evidence (localization heatmaps) for enhanced interpretability.
+## 🎯 Key Goals and Features
 
-Evidence-Grounded Reporting (Phase 3): Employ a Vision-Language Model (VLM) framework to translate the vision model's numerical and spatial outputs into a structured, clinically relevant diagnostic narrative, mitigating the risk of AI hallucination.
+### 1. Multi-Domain Generalization (Phase 1)
+Train a single **Gatekeeper** model to classify X-rays by body part (Chest, Knee, Hand, Skull, etc.) and route them to the correct specialized module.
 
-Explainable AI (XAI): Integrate Grad-CAM visualizations directly into the analysis output to show clinicians why a decision was made.
+### 2. Pathology Localization and Classification (Phase 2)
+Use **Multi-Task Learning (MTL)** to classify abnormalities (e.g., Pneumonia, Fracture) and generate localization heatmaps.
 
-⚙️ Proposed Architecture: Three-Phase Cascade
+### 3. Evidence-Grounded Reporting (Phase 3)
+Apply a **Vision-Language Model (VLM)** to translate model outputs into structured, clinically meaningful diagnostic reports.
 
-Phase 1: Image Gatekeeping (Classification & Routing)
+### 4. Explainable AI (XAI)
+Integrate **Grad-CAM** visualizations to show which regions influenced the model’s decisions.
 
-Model: Pre-trained CNN (ResNet/EfficientNet) fine-tuned on diverse X-ray datasets (UNIFESP).
+---
 
-Task: Multi-class classification of the body part (e.g., 'Chest', 'Knee', 'Elbow').
+## ⚙️ Proposed Architecture: Three-Phase Cascade
 
-Phase 2: Deep Analysis (Multi-Task Vision)
+### Phase 1: Image Gatekeeping (Classification & Routing)
+- **Purpose:** Identify the anatomical region.  
+- **Model:** Pre-trained CNN (ResNet/EfficientNet) fine-tuned on UNIFESP.  
+- **Output:** Body part label (e.g., `Chest`, `Knee`, `Hand`).  
 
-Model: DenseNet-121 backbone optimized for specific domains (Thoracic, Musculoskeletal).
+### Phase 2: Deep Analysis (Multi-Task Vision)
+- **Purpose:** Detect, classify, and localize abnormalities.  
+- **Model:** DenseNet-121 optimized for Thoracic and Musculoskeletal categories.  
+- **Tasks:**  
+  - Multi-label disease classification  
+  - Weakly-supervised localization via Grad-CAM  
 
-Task: Multi-label disease classification and weakly-supervised localization (Grad-CAM).
+### Phase 3: Automated Reporting (Vision-Language Integration)
+- **Purpose:** Generate structured diagnostic narratives.  
+- **Model:** Transformer Decoder / VLM conditioned on Phase-2 outputs.  
+- **Output:** `Findings` and `Impression` sections.  
 
-Phase 3: Automated Reporting (Vision-Language Integration)
+---
 
-Model: Transformer Decoder/VLM conditioned on Phase 2 outputs (labels, confidence, bounding boxes).
+## 💾 Datasets Used
 
-Task: Generation of structured 'Findings' and 'Impression' sections of a report.
+- **UNIFESP X-Ray Body Part Classification** – Phase 1  
+- **CheXpert / NIH ChestXray14** – Thoracic analysis & reporting  
+- **MURA** – Musculoskeletal analysis  
 
-💾 Datasets Used
+---
 
-This project uses several large, publicly available medical imaging datasets:
+## 📈 Evaluation Metrics
 
-UNIFESP X-Ray Body Part Classification: Used for training the Phase 1 Gatekeeper model.
+| Module | Metrics |
+|--------|---------|
+| **Classification** | AUC |
+| **Localization** | IoU (Jaccard), DICE |
+| **Reporting** | Clinical F1-Score, BLEU, ROUGE |
 
-CheXpert / NIH Chest X-ray: Used for Phase 2 (Thoracic analysis) and Phase 3 (Report Generation).
+---
 
-MURA (Musculoskeletal Radiographs): Used for Phase 2 (Musculoskeletal analysis) and domain generalization testing.
+## 💻 Repository Structure & Reproducibility
 
-📈 Evaluation Metrics
+This repository will include:
 
-Performance is measured using clinically relevant metrics across the entire pipeline:
+- Full implementation  
+- Training and inference scripts  
+- Environment specifications  
+- Experiment documentation  
+- Milestone submissions (M2, M3, Final Report)
 
-Classification: Area Under the ROC Curve (AUC)
+---
 
-Localization: Jaccard Index (IoU) / DICE Score
-
-Reporting: Clinical Accuracy (F1-Score), BLEU/ROUGE Scores
-
-💻 Repository Structure & Reproducibility
-
-This repository will contain the full code, training scripts, environment specifications, and detailed documentation required to reproduce the results presented in the project milestones (M2, M3, Final Report).
-
-Tentative Repository Link
+## 🔗 Tentative Repository Link
 
 [Your GitHub/GitLab Repository Link Here]
