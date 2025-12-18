@@ -1,6 +1,8 @@
 # --- Project Specific Ignores ---
 # Large Datasets
 unifesp_xray_dataset/
+mura_dataset/
+nih_chest_dataset/
 
 # Virtual Environments
 radai_venv/

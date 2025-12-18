@@ -43,8 +43,18 @@ class UNIFESPXRayDataset(Dataset):
         row = self.dataframe.iloc[idx]
         img_path = row['FilePath']
         
+        # --- WINDOWS LONG PATH FIX ---
+        # Convert to absolute path
+        abs_path = os.path.abspath(img_path)
+        
+        # On Windows, prepend \\?\ to allow paths longer than 260 chars
+        if os.name == 'nt' and not abs_path.startswith('\\\\?\\'):
+            abs_path = '\\\\?\\' + abs_path
+            
         try:
-            dicom_data = pydicom.dcmread(img_path)
+            # Read using the absolute long path
+            dicom_data = pydicom.dcmread(abs_path)
+            
             image_array = dicom_data.pixel_array
             if dicom_data.PhotometricInterpretation == "MONOCHROME1":
                 image_array = np.amax(image_array) - image_array
@@ -55,7 +65,10 @@ class UNIFESPXRayDataset(Dataset):
             image_array = (image_array * 255).astype(np.uint8)
             image = Image.fromarray(image_array)
         except Exception as e:
-            print(f"Error loading {img_path}: {e}")
+            # Only print error if it's NOT the "No such file" to avoid spamming console
+            # during long training if a few files are truly missing
+            if "No such file" not in str(e):
+                print(f"Error loading {img_path}: {e}")
             image = Image.new('L', (224, 224), 0)
         
         image = image.convert('RGB')
